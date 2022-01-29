@@ -1,0 +1,11 @@
+:host {
+  mat-form-field {
+    display: block;
+    width: 25%;
+    min-width: 50px;
+  }
+  mat-spinner {
+    display: inline;
+    margin-left: -10px;
+  }
+}

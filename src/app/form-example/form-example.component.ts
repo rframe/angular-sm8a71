@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl } from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup} from '@angular/forms';
+import {MyAsyncValidator} from '../shared/validators/my-async.validator';
+import {CustomErrorStateMatcher} from '../shared/validators/error-state-matchers';
 
 /**
  * @title Input with a clear button
@@ -9,10 +11,18 @@ import { FormBuilder, FormControl } from '@angular/forms';
   templateUrl: 'form-example.component.html',
   styleUrls: ['form-example.component.scss'],
 })
-export class FormExampleComponent {
-  control: FormControl;
-
+export class FormExampleComponent implements OnInit{
+  form: FormGroup;
+  validStatus: 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED' = 'VALID';
+  pendingStatus: 'VALID' | 'INVALID' | 'PENDING' | 'DISABLED' = 'PENDING';
+  errorStateMatcher = new CustomErrorStateMatcher();
   constructor(private fb: FormBuilder) {
-    this.control = fb.control({ value: 'my val', disabled: true });
+  }
+
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      'textBox': new FormControl(null, [MyAsyncValidator.shouldBeValid], []),
+      'asyncTextBox': new FormControl(null, [], [MyAsyncValidator.shouldBeValidAsync])
+    });
   }
 }
