@@ -5,22 +5,19 @@ the save button is enabled.
 <br>
 Note: The button is only enabled when both text boxes are valid and there are no pending asynchronous validations in progress.
 <form [formGroup]="form">
-    <mat-form-field class="example-form-field" appearance="fill" *ngIf="form.controls.textBox as control">
-        <mat-label>Text Box</mat-label>
-        <input matInput type="text" formControlName="textBox" [errorStateMatcher]="errorStateMatcher">
-        <mat-spinner *ngIf="control.status == pendingStatus" [diameter]="20"></mat-spinner>
-        <mat-error *ngIf="control.errors?.shouldBeValid">
-            Input is expected to by empty or the case sensitive string {{control.errors?.shouldBeValid}}
-        </mat-error>
-    </mat-form-field>
-
-    <mat-form-field class="example-form-field" appearance="fill" *ngIf="form.controls.asyncTextBox as control">
-        <mat-label>Async Validation Text Box</mat-label>
-        <input matInput type="text" formControlName="asyncTextBox" [errorStateMatcher]="errorStateMatcher">
-        <mat-spinner *ngIf="control.status == pendingStatus" [diameter]="20"></mat-spinner>
-        <mat-error *ngIf="control.errors?.shouldBeValid">
-            Input is expected to by empty or the case sensitive string {{control.errors?.shouldBeValid}}
-        </mat-error>
-    </mat-form-field>
+    <ng-container *ngTemplateOutlet="textBox; context: {$implicit: 'textBox', label: 'Text Box'}"></ng-container>
+    <ng-container *ngTemplateOutlet="textBox; context: {$implicit: 'asyncTextBox', label: 'Async Validation Text Box'}"></ng-container>
     <button [disabled]="form.status !== validStatus">Submit</button>
+
+
+    <ng-template #textBox let-controlName let-label="label">
+        <mat-form-field class="example-form-field" appearance="fill" *ngIf="form.controls[controlName] as control">
+            <mat-label>{{label}}</mat-label>
+            <input matInput type="text" [formControlName]="controlName" [errorStateMatcher]="errorStateMatcher">
+            <mat-spinner *ngIf="control.status == pendingStatus" [diameter]="20"></mat-spinner>
+                <mat-error *ngIf="control.errors && control.errors['shouldBeValid'] as shouldBeValid">
+                    Input is expected to by empty or the case sensitive string {{shouldBeValid}}
+                </mat-error>
+        </mat-form-field>
+    </ng-template>
 </form>
