@@ -1,5 +1,9 @@
-This is an example async validator that resolves after 1 minute, there is a progress spinner in the text box to indicate we are waiting for validation,
-once the form is completely valid the save button is enabled
+The first text box is a normal synchronous validator, the second is an example async validator that resolves after 1 minute,
+there is a progress spinner in the text box to indicate we are waiting for validation,once the form is completely valid
+the save button is enabled.
+<br>
+<br>
+Note: The button is only enabled when both text boxes are valid and there are no pending asynchronous validations in progress.
 <form [formGroup]="form">
     <mat-form-field class="example-form-field" appearance="fill" *ngIf="form.controls.textBox as control">
         <mat-label>Text Box</mat-label>
